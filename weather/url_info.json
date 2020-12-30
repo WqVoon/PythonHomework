@@ -1,0 +1,7 @@
+{
+  "url": "https://tianqiapi.com/api?version=v6&",
+  "args": {
+    "appid": "你的 appid，可以去申请",
+    "appsecret": "你的 appsecret，可以去申请"
+  }
+}
