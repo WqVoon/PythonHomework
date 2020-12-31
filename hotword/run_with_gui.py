@@ -1,11 +1,10 @@
-# 用 shell 进行交互的客户端
-
 from backend.cp import ContentProvider as CP
 from utils import Loger, SUPPORTED_KEYS
+from frontend.drawers import Drawers
 
 Loger.is_debug_mode = True
 
-idx = int(input(
+cls_idx = int(input(
 	"请输入新闻类别:\n " +
 	" ".join([
 		f"{idx}: {SUPPORTED_KEYS[idx]}"
@@ -13,8 +12,12 @@ idx = int(input(
 	]) +
 	"\n> "
 ))
-cnt = int(input("请输入热词数量:\n> "))
+form_idx = int(input(
+    "展示形式:\n"+
+    " 0: 直方图 1: 饼图\n"+
+    "> "
+))
 
-CP.get_info(SUPPORTED_KEYS[idx])
 
-print(CP.get_topn(cnt))
+CP.get_info(SUPPORTED_KEYS[cls_idx])
+Drawers[form_idx](CP.get_topn(10)).draw()

@@ -29,13 +29,29 @@ class ContentProvider:
 		"""
 		根据当前内容来从缓存或网页获取热词信息
 		"""
+		WC.reset()
 		cls = CP.regularize_input(cls)
+		log(f"开始分析 {cls} 类别中的内容")
 		cached_item = CP.cache.get(cls, {'timestamp': 0, 'cnt': 0})
 		timestamp = cached_item['timestamp']
 		if CP.is_overtime(timestamp) or cached_item['cnt'] < cnt:
 			CP.__get_info_from_server(cls, cnt)
 		else:
 			CP.__get_info_from_cache(cls)
+
+	@staticmethod
+	def get_all_data():
+		"""
+		获取 WC 中的所有内容
+		"""
+		return WC.get_all_data()
+
+	@staticmethod
+	def get_topn(n):
+		"""
+		获取 WC 中前 n 条内容
+		"""
+		return WC.get_topn(n)
 
 	@staticmethod
 	def __get_info_from_cache(cls):

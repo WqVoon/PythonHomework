@@ -88,11 +88,11 @@ class CrawlerController:
 		创建 THREAD_COUNT 个线程来爬取 UG.task_queue 中的数据
 		同时阻塞主线程直到所有数据被消耗干净
 		"""
-		WordCounter.reset()
 		for i in range(CrawlerController.THREAD_COUNT):
 			Crawler().start()
 
 		UG.task_queue.join()
+		log("热词信息统计完毕")
 
 
 class Crawler(Thread):
