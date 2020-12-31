@@ -1,23 +1,38 @@
 from backend.cp import ContentProvider as CP
-from utils import Loger, SUPPORTED_KEYS
+from frontend.ui import ClsChooser, FormChooser
 from frontend.drawers import Drawers
+from utils import Loger, SUPPORTED_KEYS
+import tkinter as tk
 
 Loger.is_debug_mode = True
 
-cls_idx = int(input(
-	"请输入新闻类别:\n " +
-	" ".join([
-		f"{idx}: {SUPPORTED_KEYS[idx]}"
-		for idx in range(len(SUPPORTED_KEYS))
-	]) +
-	"\n> "
-))
-form_idx = int(input(
-    "展示形式:\n"+
-    " 0: 直方图 1: 饼图\n"+
-    "> "
-))
+
+def gen_btn_action(c, f):
+	"""
+	利用闭包生成一个绑定了 ClsChooser 和 FormChooser 的动作函数
+	"""
+	def inner_func():
+		cls = c.get_value()
+		form = f.get_value()
+		try:
+			CP.get_info(cls)
+			Drawers[form](CP.get_topn(10)).draw()
+		except Exception as err:
+			pass
+
+	return inner_func
 
 
-CP.get_info(SUPPORTED_KEYS[cls_idx])
-Drawers[form_idx](CP.get_topn(10)).draw()
+top = tk.Tk()
+clss = ClsChooser(top)
+forms = FormChooser(top)
+btn = tk.Button(top, text="查询", command=gen_btn_action(clss, forms))
+
+clss.grid(sticky='w')
+forms.grid(sticky='w')
+btn.grid()
+
+top.title("新闻热词分析")
+top.resizable(False, False)
+top.protocol('WM_DELETE_WINDOW', lambda: top.destroy())
+top.mainloop()

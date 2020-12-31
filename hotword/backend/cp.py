@@ -12,6 +12,7 @@ class ContentProvider:
 	"""
 
 	cache = None
+	ok = False
 
 	@staticmethod
 	def init():
@@ -29,6 +30,7 @@ class ContentProvider:
 		"""
 		根据当前内容来从缓存或网页获取热词信息
 		"""
+		CP.ok = False
 		WC.reset()
 		cls = CP.regularize_input(cls)
 		log(f"开始分析 {cls} 类别中的内容")
@@ -44,6 +46,8 @@ class ContentProvider:
 		"""
 		获取 WC 中的所有内容
 		"""
+		if not CP.ok:
+			raise Exception("查询失败")
 		return WC.get_all_data()
 
 	@staticmethod
@@ -51,6 +55,8 @@ class ContentProvider:
 		"""
 		获取 WC 中前 n 条内容
 		"""
+		if not CP.ok:
+			raise Exception("查询失败")
 		return WC.get_topn(n)
 
 	@staticmethod
@@ -58,6 +64,7 @@ class ContentProvider:
 		log("从缓存获取热词信息")
 		items = CP.cache[cls]['data']
 		WC.update_result(items)
+		CP.ok = True
 
 	@staticmethod
 	def __get_info_from_server(cls, cnt):
@@ -66,8 +73,10 @@ class ContentProvider:
 			UG.get_urls(cls, cnt)
 			CC.get_data()
 			CP.save_cache(cls, cnt)
+			CP.ok = True
 		except Exception as err:
 			log(f"查询失败，原因{err}")
+			CP.ok = False
 
 	@staticmethod
 	def save_cache(cls, cnt):
