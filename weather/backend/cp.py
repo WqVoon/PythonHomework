@@ -20,7 +20,7 @@ class ContentProvider:
 		从文件中加载缓存
 		"""
 		try:
-			with open("../cache.json") as f:
+			with open("cache.json") as f:
 				CP.cache = load(f)
 		except Exception:
 			CP.cache = {}
@@ -82,8 +82,8 @@ class ContentProvider:
 			self.__update_self_data(info)
 			CP.save_cache(city_name, info)
 		except Exception as err:
-			log(f"查询出错, 原因:{err}")
-			self.err = "查询失败"
+			self.err = f"查询出错, 原因:{err}"
+			log(self.err)
 		finally:
 			return info
 

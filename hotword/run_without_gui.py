@@ -5,16 +5,25 @@ from utils import Loger, SUPPORTED_KEYS
 
 Loger.is_debug_mode = True
 
-idx = int(input(
-	"请输入新闻类别:\n " +
+cls_prompt = ("请输入新闻类别:\n " +
 	" ".join([
 		f"{idx}: {SUPPORTED_KEYS[idx]}"
 		for idx in range(len(SUPPORTED_KEYS))
 	]) +
-	"\n> "
-))
-cnt = int(input("请输入热词数量:\n> "))
+	"\n> ")
 
-CP.get_info(SUPPORTED_KEYS[idx])
+cnt_prompt = "请输入热词数量:\n> "
 
-print(CP.get_topn(cnt))
+while True:
+	try:
+		idx = int(input(cls_prompt))
+		cnt = int(input(cnt_prompt))
+
+		CP.get_info(SUPPORTED_KEYS[idx])
+		print(f"新闻热词 Top{cnt}")
+		for word, cnt in CP.get_topn(cnt):
+			print(f"\t“{word}” 出现了 {cnt} 次")
+
+	except (KeyboardInterrupt, EOFError):
+		print("Bye")
+		break

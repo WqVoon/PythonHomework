@@ -8,16 +8,16 @@ Loger.is_debug_mode = True
 
 @CP.bind
 def action(cp, city_name):
-    cp.get_weather_info(city_name)
-    if cp.err:
-        print(cp.err)
-    else:
-        print(cp.ret_info)
+	cp.get_weather_info(city_name)
+	if cp.err:
+		print(cp.err)
+	else:
+		print(cp.ret_info)
 
 
 while True:
-    try:
-        action(input("请输入城市名:"))
-    except (EOFError, KeyboardInterrupt):
-        print("\nBye")
-        break
+	try:
+		action(input("请输入城市名:"))
+	except (EOFError, KeyboardInterrupt):
+		print("\nBye")
+		break
